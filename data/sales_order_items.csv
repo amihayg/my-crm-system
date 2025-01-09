@@ -1,0 +1,4 @@
+order_id,product_id,quantity,unit_price,total_price
+SO001,PROD001,1,999.99,999.99
+SO001,PROD002,2,29.99,59.98
+SO002,PROD003,5,9.99,49.95 

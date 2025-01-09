@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products - CRM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span>CRM Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/customers">Customers</a></li>
+            <li><a href="/suppliers">Suppliers</a></li>
+            <li><a href="/sales">Sales Orders</a></li>
+            <li><a href="/purchases">Purchase Orders</a></li>
+            <li><a href="/inventory">Inventory</a></li>
+            <li><a href="/products" class="active">Products</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <header>
+            <div class="page-header">
+                <h1>Products Catalog</h1>
+                <button class="add-button">+ Add Product</button>
+            </div>
+            <div class="filters">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search products...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+                <select class="filter-select">
+                    <option value="all">All Suppliers</option>
+                    {% for supplier in suppliers %}
+                    <option value="{{ supplier.supplier_id }}">{{ supplier.company_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </header>
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="{{ url_for('static', filename='product-placeholder.png') }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-info">
+                    <h3>{{ product.name }}</h3>
+                    <p class="product-description">{{ product.description }}</p>
+                    <div class="product-details">
+                        <span class="product-price">${{ product.unit_price }}</span>
+                        <span class="product-category">{{ product.category }}</span>
+                    </div>
+                    <div class="product-stock">
+                        <span class="stock-level {% if product.current_stock < product.min_stock_level %}low{% endif %}">
+                            Stock: {{ product.current_stock }}
+                        </span>
+                        <span class="min-stock">
+                            Min: {{ product.min_stock_level }}
+                        </span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-btn edit">Edit</button>
+                        <button class="action-btn view">View Details</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html> 

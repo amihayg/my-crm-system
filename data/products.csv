@@ -1,0 +1,4 @@
+product_id,name,description,category,unit_price,supplier_id,min_stock_level
+PROD001,Laptop Pro X1,High-end laptop,Electronics,999.99,SUP001,10
+PROD002,Wireless Mouse,Ergonomic mouse,Accessories,29.99,SUP002,20
+PROD003,USB-C Cable,1m charging cable,Accessories,9.99,SUP003,50 

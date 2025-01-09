@@ -1,0 +1,4 @@
+customer_id,company_name,contact_name,email,phone,address,country,credit_limit
+CUS001,ABC Corp,Alice Brown,alice@abccorp.com,+1-555-0201,321 Corp St,USA,10000
+CUS002,XYZ Industries,Bob Wilson,bob@xyz.com,+1-555-0202,654 Ind Ave,UK,15000
+CUS003,Local Shop,Carol Davis,carol@localshop.com,+1-555-0203,987 Local Rd,Canada,5000 

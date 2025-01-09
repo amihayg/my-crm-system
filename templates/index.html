@@ -1,61 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inventory CRM</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .download-btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .download-btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>CRM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
 </head>
 <body>
-    <h1>Inventory Status</h1>
-    <a href="/download-excel" class="download-btn">Download Excel</a>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in inventory %}
-            <tr>
-                <td>{{ item.product_id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>${{ item.price }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <nav class="sidebar">
+        <div class="logo">
+            <span>CRM Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard" class="active">Dashboard</a></li>
+            <li><a href="/customers">Customers</a></li>
+            <li><a href="/suppliers">Suppliers</a></li>
+            <li><a href="/sales">Sales Orders</a></li>
+            <li><a href="/purchases">Purchase Orders</a></li>
+            <li><a href="/inventory">Inventory</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <header>
+            <div class="search-bar">
+                <input type="text" placeholder="Search...">
+            </div>
+            <div class="user-profile">
+                <span>John Doe</span>
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Profile">
+            </div>
+        </header>
+        <div class="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p class="stat-number">$45,289</p>
+                    <span class="trend positive">+12.5%</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Orders</h3>
+                    <p class="stat-number">24</p>
+                    <span class="trend">Current</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Low Stock Items</h3>
+                    <p class="stat-number">7</p>
+                    <span class="trend negative">Alert</span>
+                </div>
+                <div class="stat-card">
+                    <h3>New Customers</h3>
+                    <p class="stat-number">12</p>
+                    <span class="trend positive">This Month</span>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html> 

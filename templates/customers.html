@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customers - CRM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span>CRM Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/customers" class="active">Customers</a></li>
+            <li><a href="/suppliers">Suppliers</a></li>
+            <li><a href="/sales">Sales Orders</a></li>
+            <li><a href="/purchases">Purchase Orders</a></li>
+            <li><a href="/inventory">Inventory</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <header>
+            <div class="page-header">
+                <h1>Customers</h1>
+                <button class="add-button">+ Add Customer</button>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Search customers...">
+            </div>
+        </header>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Country</th>
+                        <th>Credit Limit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for customer in customers %}
+                    <tr>
+                        <td>{{ customer.customer_id }}</td>
+                        <td>{{ customer.company_name }}</td>
+                        <td>{{ customer.contact_name }}</td>
+                        <td>{{ customer.email }}</td>
+                        <td>{{ customer.phone }}</td>
+                        <td>{{ customer.country }}</td>
+                        <td>${{ customer.credit_limit }}</td>
+                        <td class="actions">
+                            <button class="action-btn edit">Edit</button>
+                            <button class="action-btn delete">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html> 

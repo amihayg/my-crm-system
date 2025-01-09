@@ -1,0 +1,4 @@
+supplier_id,company_name,contact_name,email,phone,address,country
+SUP001,Tech Solutions Ltd,John Smith,john@techsolutions.com,+1-555-0101,123 Tech St,USA
+SUP002,Global Parts Inc,Sarah Chen,sarah@globalparts.com,+1-555-0102,456 Global Ave,China
+SUP003,Euro Electronics,Hans Weber,hans@euroelec.eu,+49-555-0103,789 Euro Blvd,Germany 

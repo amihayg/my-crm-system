@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory - CRM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span>CRM Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/customers">Customers</a></li>
+            <li><a href="/suppliers">Suppliers</a></li>
+            <li><a href="/sales">Sales Orders</a></li>
+            <li><a href="/purchases">Purchase Orders</a></li>
+            <li><a href="/inventory" class="active">Inventory</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <header>
+            <div class="page-header">
+                <h1>Inventory Management</h1>
+                <button class="add-button">+ Add Stock</button>
+            </div>
+            <div class="filters">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search inventory...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">All Categories</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="accessories">Accessories</option>
+                </select>
+                <select class="filter-select">
+                    <option value="all">Stock Level</option>
+                    <option value="low">Low Stock</option>
+                    <option value="normal">Normal</option>
+                    <option value="high">High Stock</option>
+                </select>
+            </div>
+        </header>
+        <div class="inventory-stats">
+            <div class="stat-card">
+                <h3>Total Items</h3>
+                <p class="stat-number">{{ total_items }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Low Stock Items</h3>
+                <p class="stat-number warning">{{ low_stock_items }}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Total Value</h3>
+                <p class="stat-number">${{ total_value }}</p>
+            </div>
+        </div>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total Value</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in inventory %}
+                    <tr>
+                        <td>{{ item.product_id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.warehouse_location }}</td>
+                        <td>
+                            <div class="quantity-display">
+                                {{ item.quantity }}
+                                {% if item.quantity < item.min_stock_level %}
+                                <span class="stock-alert">⚠️ Low Stock</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>${{ item.unit_price }}</td>
+                        <td>${{ "%.2f"|format(item.quantity * item.unit_price) }}</td>
+                        <td>
+                            <span class="stock-badge {{ item.status.lower() }}">
+                                {{ item.status }}
+                            </span>
+                        </td>
+                        <td class="actions">
+                            <button class="action-btn adjust">Adjust</button>
+                            <button class="action-btn history">History</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html> 

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Orders - CRM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">
+            <span>CRM Pro</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/customers">Customers</a></li>
+            <li><a href="/suppliers">Suppliers</a></li>
+            <li><a href="/sales" class="active">Sales Orders</a></li>
+            <li><a href="/purchases">Purchase Orders</a></li>
+            <li><a href="/inventory">Inventory</a></li>
+            <li><a href="/products">Products</a></li>
+        </ul>
+    </nav>
+    <main class="content">
+        <header>
+            <div class="page-header">
+                <h1>Sales Orders</h1>
+                <button class="add-button">+ New Order</button>
+            </div>
+            <div class="filters">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search orders...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+        </header>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Total Amount</th>
+                        <th>Payment Status</th>
+                        <th>Delivery Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>{{ order.order_id }}</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>
+                            <span class="status-badge {{ order.status.lower() }}">
+                                {{ order.status }}
+                            </span>
+                        </td>
+                        <td>${{ order.total_amount }}</td>
+                        <td>
+                            <span class="payment-badge {{ order.payment_status.lower() }}">
+                                {{ order.payment_status }}
+                            </span>
+                        </td>
+                        <td>{{ order.delivery_date }}</td>
+                        <td class="actions">
+                            <button class="action-btn view">View Details</button>
+                            <button class="action-btn edit">Edit</button>
+                            <button class="action-btn delete">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html> 

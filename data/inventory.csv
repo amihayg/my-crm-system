@@ -1,4 +1,4 @@
-product_id,name,quantity,price
-1,Laptop,5,999.99
-2,Mouse,15,24.99
-3,Keyboard,8,59.99 
+inventory_id,product_id,warehouse_location,quantity,last_updated
+INV001,PROD001,A-101,50,2024-03-15
+INV002,PROD002,B-202,75,2024-03-15
+INV003,PROD003,C-303,30,2024-03-15 

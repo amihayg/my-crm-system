@@ -1,0 +1,4 @@
+po_id,supplier_id,order_date,status,total_amount,payment_status,expected_delivery
+PO001,SUP001,2024-03-01,Received,5000.00,Paid,2024-03-10
+PO002,SUP002,2024-03-08,In Transit,3500.00,Paid,2024-03-20
+PO003,SUP003,2024-03-15,Pending,2800.00,Pending,2024-03-25 

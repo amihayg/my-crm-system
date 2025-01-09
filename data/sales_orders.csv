@@ -1,0 +1,4 @@
+order_id,customer_id,order_date,status,total_amount,payment_status,delivery_date
+SO001,CUS001,2024-03-01,Completed,1500.00,Paid,2024-03-05
+SO002,CUS002,2024-03-10,Processing,2300.00,Pending,2024-03-15
+SO003,CUS003,2024-03-12,Pending,800.00,Pending,2024-03-18 

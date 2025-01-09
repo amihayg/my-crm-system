@@ -1,0 +1,4 @@
+po_id,product_id,quantity,unit_price,total_price
+PO001,PROD001,5,800.00,4000.00
+PO001,PROD002,50,20.00,1000.00
+PO002,PROD003,100,7.00,700.00 
