@@ -1,4 +1,14 @@
-customer_id,company_name,contact_name,email,phone,address,country,credit_limit
-CUS001,ABC Corp,Alice Brown,alice@abccorp.com,+1-555-0201,321 Corp St,USA,10000
-CUS002,XYZ Industries,Bob Wilson,bob@xyz.com,+1-555-0202,654 Ind Ave,UK,15000
-CUS003,Local Shop,Carol Davis,carol@localshop.com,+1-555-0203,987 Local Rd,Canada,5000 
+id,customer_name,email,phone,address
+2,test3,sarah.j@email.com,555-0124,"456 Oak Ave, City, State 12345"
+3,Michael Brown,mike.brown@email.com,555-0125,"789 Pine Rd, City, State 12345"
+4,Emily Davis,emily.d@email.com,555-0126,"321 Elm St, City, State 12345"
+5,David Wilson,david.w@email.com,555-0127,"654 Maple Dr, City, State 12345"
+6,Lisa Anderson,lisa.a@email.com,555-0128,"987 Cedar Ln, City, State 12345"
+7,Robert Taylor,rob.t@email.com,555-0129,"147 Birch Rd, City, State 12345"
+8,Jennifer White,jen.white@email.com,555-0130,"258 Willow Ave, City, State 12345"
+9,William Lee,will.lee@email.com,555-0131,"369 Spruce St, City, State 12345"
+10,dasf,rfdg@fsafd.hgf,76543234567,
+11,test1,gdsfgh@khgf.jhg,09876543,
+12,test23,ami@gnail.koj,234568765,
+13,test4,asdfghj@rtyui.oih,876543456557856,fdg5yytrb 
+14,test45,sdfghjk@rtyui.oih,3456789,kjlkjlkj

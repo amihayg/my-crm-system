@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Create New Order</h1>
+
+<form method="POST" id="orderForm">
+    <div class="mb-3">
+        <label for="customer_id" class="form-label">Select Customer</label>
+        <select class="form-select" id="customer_id" name="customer_id" required>
+            <option value="">Choose a customer...</option>
+            {% for customer in customers %}
+            <option value="{{ customer.id }}">{{ customer.customer_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="orderItems">
+        <h3 class="mb-3">Order Items</h3>
+        <div class="order-item mb-3 card p-3">
+            <div class="row">
+                <div class="col-md-5">
+                    <label class="form-label">Product</label>
+                    <select class="form-select product-select" name="product_ids[]" required>
+                        <option value="">Choose a product...</option>
+                        {% for product in products %}
+                        <option value="{{ product.id }}" 
+                                data-price="{{ product.price }}">
+                            {{ product.product_name }} (${{ product.price }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-control quantity-input" 
+                           name="quantities[]" value="1" min="1" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Total</label>
+                    <input type="text" class="form-control item-total" readonly>
+                </div>
+                <div class="col-md-1">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="button" class="btn btn-danger remove-item" style="display: none;">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-secondary mb-3" id="addItem">
+        <i class="bi bi-plus-circle"></i> Add Another Item
+    </button>
+
+    <div class="mb-3">
+        <h4>Order Total: $<span id="orderTotal">0.00</span></h4>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Order</button>
+    <a href="{{ url_for('orders') }}" class="btn btn-secondary">Cancel</a>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const orderItems = document.getElementById('orderItems');
+    
+    // Add item button handler
+    document.getElementById('addItem').addEventListener('click', function() {
+        const template = document.querySelector('.order-item').cloneNode(true);
+        template.querySelector('.product-select').value = '';
+        template.querySelector('.quantity-input').value = '1';
+        template.querySelector('.item-total').value = '';
+        template.querySelector('.remove-item').style.display = 'block';
+        orderItems.appendChild(template);
+        
+        // Add remove handler to new item
+        template.querySelector('.remove-item').addEventListener('click', function() {
+            template.remove();
+            calculateTotals();
+        });
+    });
+
+    // Calculate totals
+    function calculateTotals() {
+        let orderTotal = 0;
+        document.querySelectorAll('.order-item').forEach(item => {
+            const select = item.querySelector('.product-select');
+            const quantity = item.querySelector('.quantity-input').value;
+            const totalInput = item.querySelector('.item-total');
+            
+            if (select.value) {
+                const price = select.options[select.selectedIndex].dataset.price;
+                const total = price * quantity;
+                totalInput.value = '$' + total.toFixed(2);
+                orderTotal += total;
+            }
+        });
+        document.getElementById('orderTotal').textContent = orderTotal.toFixed(2);
+    }
+
+    // Add change event listeners
+    orderItems.addEventListener('change', function(e) {
+        if (e.target.classList.contains('product-select') || 
+            e.target.classList.contains('quantity-input')) {
+            calculateTotals();
+        }
+    });
+
+    // Form validation
+    document.getElementById('orderForm').addEventListener('submit', function(e) {
+        const items = document.querySelectorAll('.order-item');
+        let valid = false;
+        
+        items.forEach(item => {
+            const select = item.querySelector('.product-select');
+            const quantity = item.querySelector('.quantity-input').value;
+            if (select.value) {
+                const stock = parseInt(select.options[select.selectedIndex].dataset.stock);
+                if (parseInt(quantity) > stock) {
+                    e.preventDefault();
+                    alert(`Not enough stock for ${select.options[select.selectedIndex].text}. Available: ${stock}`);
+                    return;
+                }
+                if (quantity > 0) {
+                    valid = true;
+                }
+            }
+        });
+        
+        if (!valid) {
+            e.preventDefault();
+            alert('Please add at least one item to the order.');
+        }
+    });
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,8 @@
+id,customer_id,order_date,total_amount,status
+3,3,2025-01-12,1169.87,pending
+4,4,2025-01-12,5599.84,pending
+5,4,2025-01-12,1975076.55,pending
+6,1,2025-01-13,25999.74,pending
+7,8,2025-01-13,599.98,pending
+8,1,2025-01-13,1599.97,pending
+9,4,2025-01-13,1699.97,pending

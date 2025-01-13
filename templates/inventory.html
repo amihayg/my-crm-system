@@ -1,107 +1,166 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Inventory - CRM System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='table.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600&display=swap">
-</head>
-<body>
-    <nav class="sidebar">
-        <div class="logo">
-            <span>CRM Pro</span>
-        </div>
-        <ul class="nav-links">
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/customers">Customers</a></li>
-            <li><a href="/suppliers">Suppliers</a></li>
-            <li><a href="/sales">Sales Orders</a></li>
-            <li><a href="/purchases">Purchase Orders</a></li>
-            <li><a href="/inventory" class="active">Inventory</a></li>
-            <li><a href="/products">Products</a></li>
-        </ul>
-    </nav>
-    <main class="content">
-        <header>
-            <div class="page-header">
-                <h1>Inventory Management</h1>
-                <button class="add-button">+ Add Stock</button>
-            </div>
-            <div class="filters">
-                <div class="search-bar">
-                    <input type="text" placeholder="Search inventory...">
-                </div>
-                <select class="filter-select">
-                    <option value="all">All Categories</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="accessories">Accessories</option>
-                </select>
-                <select class="filter-select">
-                    <option value="all">Stock Level</option>
-                    <option value="low">Low Stock</option>
-                    <option value="normal">Normal</option>
-                    <option value="high">High Stock</option>
-                </select>
-            </div>
-        </header>
-        <div class="inventory-stats">
-            <div class="stat-card">
-                <h3>Total Items</h3>
-                <p class="stat-number">{{ total_items }}</p>
-            </div>
-            <div class="stat-card">
-                <h3>Low Stock Items</h3>
-                <p class="stat-number warning">{{ low_stock_items }}</p>
-            </div>
-            <div class="stat-card">
-                <h3>Total Value</h3>
-                <p class="stat-number">${{ total_value }}</p>
-            </div>
-        </div>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product ID</th>
-                        <th>Name</th>
-                        <th>Location</th>
-                        <th>Quantity</th>
-                        <th>Unit Price</th>
-                        <th>Total Value</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in inventory %}
-                    <tr>
-                        <td>{{ item.product_id }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.warehouse_location }}</td>
-                        <td>
-                            <div class="quantity-display">
-                                {{ item.quantity }}
-                                {% if item.quantity < item.min_stock_level %}
-                                <span class="stock-alert">⚠️ Low Stock</span>
-                                {% endif %}
-                            </div>
-                        </td>
-                        <td>${{ item.unit_price }}</td>
-                        <td>${{ "%.2f"|format(item.quantity * item.unit_price) }}</td>
-                        <td>
-                            <span class="stock-badge {{ item.status.lower() }}">
-                                {{ item.status }}
-                            </span>
-                        </td>
-                        <td class="actions">
-                            <button class="action-btn adjust">Adjust</button>
-                            <button class="action-btn history">History</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </main>
-</body>
-</html> 
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Inventory Management</h1>
+
+{% if low_stock %}
+<div class="alert alert-warning">
+    <h5><i class="bi bi-exclamation-triangle"></i> Low Stock Alert</h5>
+    <ul class="mb-0">
+        {% for product in low_stock %}
+        <li>{{ product.product_name }} ({{ product.stock }} units remaining - below minimum of {{ product.min_stock }})</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<!-- Add search bar -->
+<div class="row mb-3">
+    <div class="col-md-6">
+        <input type="text" id="inventorySearch" class="form-control" placeholder="Search inventory...">
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover" id="inventoryTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Current Stock</th>
+                <th>Min Stock</th>
+                <th>Max Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.product_name }}</td>
+                <td>{{ product.stock }}</td>
+                <td>
+                    <input type="number" class="form-control form-control-sm stock-limit" 
+                           data-product-id="{{ product.id }}" 
+                           data-type="min"
+                           value="{{ product.min_stock }}" 
+                           min="0" style="width: 80px;">
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-sm stock-limit" 
+                           data-product-id="{{ product.id }}" 
+                           data-type="max"
+                           value="{{ product.max_stock }}" 
+                           min="0" style="width: 80px;">
+                </td>
+                <td>
+                    {% set stock = product.stock|int %}
+                    {% set min_stock = product.min_stock|int %}
+                    {% set max_stock = product.max_stock|int %}
+                    
+                    {% if stock <= min_stock %}
+                        <span class="badge bg-danger">Low Stock</span>
+                    {% elif stock >= max_stock %}
+                        <span class="badge bg-warning">Overstocked</span>
+                    {% else %}
+                        <span class="badge bg-success">Optimal</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-success" 
+                                onclick="updateStock('{{ product.id }}', 1)">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" 
+                                onclick="updateStock('{{ product.id }}', -1)">
+                            <i class="bi bi-dash"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary" 
+                                onclick="adjustStock('{{ product.id }}')">
+                            <i class="bi bi-pencil"></i> Adjust
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Initialize search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    setupSearch('inventorySearch', 'inventoryTable');
+});
+
+function updateStock(productId, change) {
+    fetch(`/update_stock/${productId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity_change: change })
+    }).then(response => {
+        if (response.ok) {
+            window.location.reload();
+        }
+    });
+}
+
+function adjustStock(productId) {
+    const quantity = prompt('Enter new quantity change (positive or negative):');
+    if (quantity !== null) {
+        const change = parseInt(quantity);
+        if (!isNaN(change)) {
+            updateStock(productId, change);
+        }
+    }
+}
+
+// Add event listeners for min/max stock updates
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.stock-limit').forEach(input => {
+        let timeout;
+        input.addEventListener('input', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                const productId = this.dataset.productId;
+                const type = this.dataset.type;
+                const value = this.value;
+                
+                fetch(`/update_stock_limit/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        type: type,
+                        value: value
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        this.style.backgroundColor = '#d4edda';
+                        setTimeout(() => {
+                            this.style.backgroundColor = '';
+                        }, 500);
+                    }
+                });
+            }, 500);
+        });
+    });
+});
+</script>
+
+<style>
+.badge {
+    font-size: 1em;
+    min-width: 80px;
+}
+
+.stock-limit {
+    transition: background-color 0.3s;
+}
+</style>
+{% endblock %} 

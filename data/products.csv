@@ -1,4 +1,6 @@
-product_id,name,description,category,unit_price,supplier_id,min_stock_level
-PROD001,Laptop Pro X1,High-end laptop,Electronics,999.99,SUP001,10
-PROD002,Wireless Mouse,Ergonomic mouse,Accessories,29.99,SUP002,20
-PROD003,USB-C Cable,1m charging cable,Accessories,9.99,SUP003,50 
+id,product_name,description,price,stock,min_stock,max_stock
+1,Laptop,"Business Laptop 15""",999.99,23,5,100
+2,Smartphone,Latest Model 128GB,699.99,1098,10,200
+3,Tablet,"10"" Tablet 64GB",299.99,70,8,150
+4,Headphones,Wireless Noise-Canceling,159.99,200,15,300
+5,Monitor,"27"" 4K Display",349.99,30,5,50

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Add New Customer</h1>
+
+<form method="POST" class="needs-validation" novalidate>
+    <div class="mb-3">
+        <label for="customer_name" class="form-label">Customer Name</label>
+        <input type="text" class="form-control" id="customer_name" name="customer_name" required>
+    </div>
+    
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    
+    <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+        <input type="tel" class="form-control" id="phone" name="phone" required>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Add Customer</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %} 

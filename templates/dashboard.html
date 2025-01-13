@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <!-- Customer Stats -->
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Customers</h5>
+                <h2>{{ stats.total_customers }}</h2>
+                <p class="mb-0">Total Registered</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Stats -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Orders</h5>
+                <h2>{{ stats.total_orders }}</h2>
+                <p class="mb-0">
+                    <span class="badge bg-warning">{{ stats.pending_orders }} Pending</span>
+                    <span class="badge bg-info">{{ stats.completed_orders }} Completed</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Product Stats -->
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">Products</h5>
+                <h2>{{ stats.total_products }}</h2>
+                <p class="mb-0">
+                    <span class="badge bg-danger">{{ stats.low_stock_products }} Low Stock</span>
+                    <span class="badge bg-warning">{{ stats.out_of_stock }} Out of Stock</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sales Stats -->
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5 class="card-title">Sales</h5>
+                <h2>${{ "%.2f"|format(stats.total_sales) }}</h2>
+                <p class="mb-0">Avg Order: ${{ "%.2f"|format(stats.avg_order_value) }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row">
+    <!-- Recent Orders -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Orders</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in stats.recent_orders %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('order_details', order_id=order.id) }}">
+                                        #{{ order.id }}
+                                    </a>
+                                </td>
+                                <td>{{ order.order_date }}</td>
+                                <td>${{ "%.2f"|format(order.total_amount|float) }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'success' if order.status == 'completed' 
+                                        else 'warning' if order.status == 'pending' 
+                                        else 'info' }}">
+                                        {{ order.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Customers -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Recent Customers</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in stats.recent_customers %}
+                            <tr>
+                                <td>{{ customer.id }}</td>
+                                <td>{{ customer.customer_name }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.phone }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inventory Value -->
+<div class="row">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body">
+                <h5 class="card-title">Total Inventory Value</h5>
+                <h3>${{ "%.2f"|format(stats.total_inventory_value) }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+.card-title {
+    margin-bottom: 1rem;
+}
+.badge {
+    font-size: 0.875em;
+}
+</style>
+{% endblock %} 
